@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useApp } from '../contexts/AppContext';
 import FilterBar from '../components/FilterBar';
 import ProductGrid from '../components/ProductGrid';
+import BarcodeSearch from '../components/BarcodeSearch';
 
 function Home() {
   const { state, actions } = useApp();
@@ -11,6 +12,7 @@ function Home() {
       <FilterBar />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <BarcodeSearch />
         {state.error && (
           <div className="mb-6 bg-error-50 border border-error-200 rounded-lg p-4">
             <div className="flex items-center">

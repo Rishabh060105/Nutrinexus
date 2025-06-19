@@ -58,6 +58,15 @@ function appReducer(state, action) {
         ...initialState,
         categories: state.categories
       };
+    case 'CLEAR_FILTERS':
+      return { 
+        ...state, 
+        searchTerm: '',
+        categoryTag: '', 
+        sortBy: 'relevance', 
+        nutritionGradeFilter: '', 
+        page: 1 
+      };
     default:
       return state;
   }
@@ -106,22 +115,15 @@ export function AppProvider({ children }) {
 
         filteredProducts = result.products || [];
 
-        console.log('API returned products:', filteredProducts.length);
-        console.log('Nutrition grade filter:', state.nutritionGradeFilter);
-
         // Apply nutrition grade filter client-side
         if (state.nutritionGradeFilter) {
-          const beforeFilter = filteredProducts.length;
           filteredProducts = filteredProducts.filter(product => 
             product.nutrition_grades && product.nutrition_grades.toLowerCase() === state.nutritionGradeFilter.toLowerCase()
           );
-          console.log(`Filtered from ${beforeFilter} to ${filteredProducts.length} products`);
         }
 
         // Apply sorting
         filteredProducts = sortProducts(filteredProducts, state.sortBy);
-
-        console.log('Final products to display:', filteredProducts.length);
 
         dispatch({ 
           type: 'SET_PRODUCTS', 
@@ -211,6 +213,7 @@ export function AppProvider({ children }) {
     setNutritionGradeFilter: (grade) => dispatch({ type: 'SET_NUTRITION_GRADE_FILTER', payload: grade }),
     clearError: () => dispatch({ type: 'SET_ERROR', payload: null }),
     resetFilters: () => dispatch({ type: 'RESET_FILTERS' }),
+    clearFilters: () => dispatch({ type: 'CLEAR_FILTERS' }),
     loadMore,
   };
 

@@ -3,12 +3,6 @@ import ProductCard from './ProductCard';
 import LoadingSpinner from './LoadingSpinner';
 
 function ProductGrid({ products, loading, hasMore, onLoadMore }) {
-  console.log('ProductGrid render:', { 
-    productsLength: products.length, 
-    loading, 
-    hasMore 
-  });
-
   if (loading && products.length === 0) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
