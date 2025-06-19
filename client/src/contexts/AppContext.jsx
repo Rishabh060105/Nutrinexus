@@ -20,13 +20,13 @@ const initialState = {
 function appReducer(state, action) {
   switch (action.type) {
     case 'SET_SEARCH_TERM':
-      return { ...state, searchTerm: action.payload, page: 1, products: [] };
+      return { ...state, searchTerm: action.payload, page: 1 };
     case 'SET_CATEGORY_TAG':
-      return { ...state, categoryTag: action.payload, page: 1, products: [] };
+      return { ...state, categoryTag: action.payload, page: 1 };
     case 'SET_SORT_BY':
-      return { ...state, sortBy: action.payload, page: 1, products: [] };
+      return { ...state, sortBy: action.payload, page: 1 };
     case 'SET_NUTRITION_GRADE_FILTER':
-      return { ...state, nutritionGradeFilter: action.payload, page: 1, products: [] };
+      return { ...state, nutritionGradeFilter: action.payload, page: 1 };
     case 'SET_LOADING':
       return { ...state, loading: action.payload };
     case 'SET_ERROR':
@@ -104,17 +104,24 @@ export function AppProvider({ children }) {
           categoryTag: state.categoryTag,
         });
 
-        filteredProducts = result.products;
+        filteredProducts = result.products || [];
+
+        console.log('API returned products:', filteredProducts.length);
+        console.log('Nutrition grade filter:', state.nutritionGradeFilter);
 
         // Apply nutrition grade filter client-side
         if (state.nutritionGradeFilter) {
+          const beforeFilter = filteredProducts.length;
           filteredProducts = filteredProducts.filter(product => 
-            product.nutrition_grades === state.nutritionGradeFilter.toLowerCase()
+            product.nutrition_grades && product.nutrition_grades.toLowerCase() === state.nutritionGradeFilter.toLowerCase()
           );
+          console.log(`Filtered from ${beforeFilter} to ${filteredProducts.length} products`);
         }
 
         // Apply sorting
         filteredProducts = sortProducts(filteredProducts, state.sortBy);
+
+        console.log('Final products to display:', filteredProducts.length);
 
         dispatch({ 
           type: 'SET_PRODUCTS', 
