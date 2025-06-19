@@ -67,6 +67,18 @@ function appReducer(state, action) {
         nutritionGradeFilter: '', 
         page: 1 
       };
+    case 'SET_BARCODE_RESULT':
+      return { 
+        ...state, 
+        products: action.payload.products,
+        totalCount: action.payload.count,
+        hasMore: false,
+        loading: false,
+        error: null,
+        searchTerm: '',
+        categoryTag: '',
+        page: 1
+      };
     default:
       return state;
   }
@@ -214,6 +226,7 @@ export function AppProvider({ children }) {
     clearError: () => dispatch({ type: 'SET_ERROR', payload: null }),
     resetFilters: () => dispatch({ type: 'RESET_FILTERS' }),
     clearFilters: () => dispatch({ type: 'CLEAR_FILTERS' }),
+    setBarcodeResult: (result) => dispatch({ type: 'SET_BARCODE_RESULT', payload: result }),
     loadMore,
   };
 

@@ -1,19 +1,39 @@
 import React, { useState } from 'react';
 import { useApp } from '../contexts/AppContext';
+import { apiClient } from '../lib/apiClient';
 
 function BarcodeSearch() {
   const { actions } = useApp();
   const [barcode, setBarcode] = useState('');
   const [isSearching, setIsSearching] = useState(false);
+  const [searchResult, setSearchResult] = useState(null);
+  const [error, setError] = useState('');
 
   const handleBarcodeSearch = async () => {
     if (!barcode.trim()) return;
     
     setIsSearching(true);
+    setError('');
+    setSearchResult(null);
+    
     try {
-      // Clear existing search and set the barcode as search term
-      actions.clearFilters();
-      actions.setSearchTerm(barcode.trim());
+      // Use direct product lookup for barcode search
+      const product = await apiClient.getProduct(barcode.trim());
+      
+      if (product) {
+        // Create a single-product result and update the app state
+        const singleProductResult = {
+          products: [product],
+          count: 1
+        };
+        
+        // Use the dedicated barcode result action
+        actions.setBarcodeResult(singleProductResult);
+        setSearchResult(product);
+      }
+    } catch (err) {
+      setError('Product not found for this barcode. Please check the barcode and try again.');
+      console.error('Barcode search error:', err);
     } finally {
       setIsSearching(false);
     }
@@ -81,9 +101,23 @@ function BarcodeSearch() {
         </button>
       </div>
       
-      <div className="mt-2 text-xs text-blue-600">
-        <i className="fas fa-info-circle mr-1"></i>
-        Enter a 13-digit barcode to find specific products instantly
+      <div className="mt-2">
+        {error && (
+          <div className="text-xs text-red-600 mb-2">
+            <i className="fas fa-exclamation-circle mr-1"></i>
+            {error}
+          </div>
+        )}
+        {searchResult && (
+          <div className="text-xs text-green-600 mb-2">
+            <i className="fas fa-check-circle mr-1"></i>
+            Found product: {searchResult.product_name || 'Unknown Product'}
+          </div>
+        )}
+        <div className="text-xs text-blue-600">
+          <i className="fas fa-info-circle mr-1"></i>
+          Enter a 13-digit barcode to find specific products instantly
+        </div>
       </div>
     </div>
   );
