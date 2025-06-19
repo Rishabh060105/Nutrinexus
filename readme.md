@@ -113,13 +113,7 @@ Food Explorer is a modern web application that allows users to search, browse, a
 - **Error Handling**: Centralized error handling with proper HTTP status codes
 - **Development**: Runtime error overlay for debugging
 
-## Changelog
 
-- June 19, 2025: Initial setup with React 18, Express.js backend, and OpenFoodFacts API integration
-- June 19, 2025: Added dedicated barcode search functionality with direct product lookup
-- June 19, 2025: Fixed product flashing issue during search state changes
-- June 19, 2025: Made Food Explorer title clickable for home navigation
 
-## User Preferences
 
-Preferred communication style: Simple, everyday language.
+
