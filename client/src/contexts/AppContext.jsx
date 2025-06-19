@@ -74,6 +74,15 @@ export function AppProvider({ children }) {
         dispatch({ type: 'SET_CATEGORIES', payload: categories });
       } catch (error) {
         console.error('Failed to load categories:', error);
+        // Use fallback categories if API fails
+        dispatch({ type: 'SET_CATEGORIES', payload: [
+          'beverages',
+          'dairy', 
+          'snacks',
+          'chocolate',
+          'cereals',
+          'bread'
+        ]});
       }
     };
 
