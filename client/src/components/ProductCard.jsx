@@ -28,9 +28,36 @@ function ProductCard({ product }) {
     cartActions.addItem(product);
   };
 
-  const imageUrl = product.images?.front_small_url || 
-                   product.images?.front_url || 
-                   'https://via.placeholder.com/300x200?text=No+Image';
+  // Get the best available image URL
+  const getImageUrl = (product) => {
+    const images = product.images || {};
+    
+    // Try different image sizes in order of preference
+    if (images.front_small_url) return images.front_small_url;
+    if (images.front_url) return images.front_url;
+    if (images.front_thumb_url) return images.front_thumb_url;
+    
+    // Construct image URL from product code if no direct URL available
+    if (product.code) {
+      const code = product.code;
+      const folder1 = code.slice(0, 3);
+      const folder2 = code.slice(3, 6);
+      const folder3 = code.slice(6, 9);
+      return `https://images.openfoodfacts.org/images/products/${folder1}/${folder2}/${folder3}/${code}/front_small.jpg`;
+    }
+    
+    // Create a more appealing placeholder
+    return `data:image/svg+xml,${encodeURIComponent(`
+      <svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+        <rect width="100%" height="100%" fill="#f3f4f6"/>
+        <circle cx="150" cy="80" r="25" fill="#d1d5db"/>
+        <rect x="110" y="120" width="80" height="8" rx="4" fill="#d1d5db"/>
+        <rect x="125" y="140" width="50" height="6" rx="3" fill="#e5e7eb"/>
+      </svg>
+    `)}`;
+  };
+
+  const imageUrl = getImageUrl(product);
 
   const productName = product.product_name || 'Unknown Product';
   const brandName = product.brands?.split(',')[0] || 'Unknown Brand';
@@ -48,7 +75,15 @@ function ProductCard({ product }) {
           alt={productName}
           className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-200"
           onError={(e) => {
-            e.target.src = 'https://via.placeholder.com/300x200?text=No+Image';
+            // Use the same SVG placeholder as the fallback
+            e.target.src = `data:image/svg+xml,${encodeURIComponent(`
+              <svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+                <rect width="100%" height="100%" fill="#f3f4f6"/>
+                <circle cx="150" cy="80" r="25" fill="#d1d5db"/>
+                <rect x="110" y="120" width="80" height="8" rx="4" fill="#d1d5db"/>
+                <rect x="125" y="140" width="50" height="6" rx="3" fill="#e5e7eb"/>
+              </svg>
+            `)}`;
           }}
         />
         
