@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'wouter';
 import { useCart } from '../contexts/CartContext';
 import SearchBar from './SearchBar';
 import CategoryFilter from './CategoryFilter';
@@ -17,10 +18,12 @@ function Layout({ children }) {
             {/* Logo & Brand */}
             <div className="flex items-center space-x-4">
               <div className="flex-shrink-0">
-                <h1 className="text-xl font-bold text-gray-900">
-                  <i className="fas fa-apple-alt text-primary-600 mr-2"></i>
-                  Food Explorer
-                </h1>
+                <Link href="/">
+                  <h1 className="text-xl font-bold text-gray-900 cursor-pointer hover:text-primary-600 transition-colors">
+                    <i className="fas fa-apple-alt text-primary-600 mr-2"></i>
+                    Food Explorer
+                  </h1>
+                </Link>
               </div>
             </div>
 
@@ -69,10 +72,12 @@ function Layout({ children }) {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             
             <div className="col-span-1 md:col-span-2">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">
-                <i className="fas fa-apple-alt text-primary-600 mr-2"></i>
-                Food Explorer
-              </h3>
+              <Link href="/">
+                <h3 className="text-lg font-bold text-gray-900 mb-4 cursor-pointer hover:text-primary-600 transition-colors">
+                  <i className="fas fa-apple-alt text-primary-600 mr-2"></i>
+                  Food Explorer
+                </h3>
+              </Link>
               <p className="text-gray-600 text-sm leading-relaxed mb-4">
                 Discover and explore food products with detailed nutrition information, 
                 ingredients, and health scores powered by OpenFoodFacts.
